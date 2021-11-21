@@ -25,7 +25,7 @@ public class MainFrame extends javax.swing.JFrame {
         listPanelItem.add(Panel_Item_ThongKeCovid);
         listPanelItem.add(Panel_Item_TraCuuCovid);
         listPanelItem.add(Panel_TraCuuDiaLy);
-        
+        listPanelItem.add(Panel_TraCuuDiaLyQuocGia);
         setSelectedItem(Panel_Item_ThongKeCovid, HOVER_COLOR);
         addPanel(new ThongKeCovidPanel());
     }
@@ -79,13 +79,15 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         Panel_Item_TraCuuCovid = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        Panel_TraCuuDiaLyQuocGia = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
         HeadPanel = new javax.swing.JPanel();
         CloseButton = new javax.swing.JButton();
         MiniMizeButton = new javax.swing.JButton();
         MaximizeButton = new javax.swing.JButton();
         CenterPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
 
         jLabel3.setFont(new java.awt.Font("Viner Hand ITC", 1, 24)); // NOI18N
@@ -129,8 +131,8 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/location-24.png"))); // NOI18N
-        jLabel4.setText("Tra cứu địa lý");
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/taxi-location-24.png"))); // NOI18N
+        jLabel4.setText("Tra cứu thành phố");
 
         javax.swing.GroupLayout Panel_TraCuuDiaLyLayout = new javax.swing.GroupLayout(Panel_TraCuuDiaLy);
         Panel_TraCuuDiaLy.setLayout(Panel_TraCuuDiaLyLayout);
@@ -174,6 +176,31 @@ public class MainFrame extends javax.swing.JFrame {
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
         );
 
+        Panel_TraCuuDiaLyQuocGia.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Panel_TraCuuDiaLyQuocGiaMouseClicked(evt);
+            }
+        });
+
+        jLabel8.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/location-24.png"))); // NOI18N
+        jLabel8.setText("Tra cứu quốc gia");
+
+        javax.swing.GroupLayout Panel_TraCuuDiaLyQuocGiaLayout = new javax.swing.GroupLayout(Panel_TraCuuDiaLyQuocGia);
+        Panel_TraCuuDiaLyQuocGia.setLayout(Panel_TraCuuDiaLyQuocGiaLayout);
+        Panel_TraCuuDiaLyQuocGiaLayout.setHorizontalGroup(
+            Panel_TraCuuDiaLyQuocGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel_TraCuuDiaLyQuocGiaLayout.createSequentialGroup()
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 43, Short.MAX_VALUE))
+        );
+        Panel_TraCuuDiaLyQuocGiaLayout.setVerticalGroup(
+            Panel_TraCuuDiaLyQuocGiaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout LeftPanelLayout = new javax.swing.GroupLayout(LeftPanel);
         LeftPanel.setLayout(LeftPanelLayout);
         LeftPanelLayout.setHorizontalGroup(
@@ -195,7 +222,9 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addGroup(LeftPanelLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(Panel_TraCuuDiaLy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Panel_TraCuuDiaLyQuocGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Panel_TraCuuDiaLy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(0, 18, Short.MAX_VALUE))
         );
@@ -213,7 +242,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Panel_TraCuuDiaLy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 524, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Panel_TraCuuDiaLyQuocGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 466, Short.MAX_VALUE))
         );
 
         HeadPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -296,11 +327,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(MainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(MainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -332,19 +363,27 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_MaximizeButtonActionPerformed
 
     private void Panel_Item_ThongKeCovidMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_Item_ThongKeCovidMouseClicked
-        addPanel(new ThongKeCovidPanel());
         setSelectedItem(Panel_Item_ThongKeCovid, HOVER_COLOR);
+        addPanel(new ThongKeCovidPanel());
+        
     }//GEN-LAST:event_Panel_Item_ThongKeCovidMouseClicked
 
     private void Panel_Item_TraCuuCovidMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_Item_TraCuuCovidMouseClicked
-        addPanel(new ThongKeCovidPanel());
         setSelectedItem(Panel_Item_TraCuuCovid, HOVER_COLOR);
+        addPanel(new ThongKeCovidPanel());
+        
     }//GEN-LAST:event_Panel_Item_TraCuuCovidMouseClicked
 
     private void Panel_TraCuuDiaLyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_TraCuuDiaLyMouseClicked
-        addPanel(new testPanel());
         setSelectedItem(Panel_TraCuuDiaLy, HOVER_COLOR);
+        addPanel(new TraCuuDiaLyPanel());
+        
     }//GEN-LAST:event_Panel_TraCuuDiaLyMouseClicked
+
+    private void Panel_TraCuuDiaLyQuocGiaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Panel_TraCuuDiaLyQuocGiaMouseClicked
+        setSelectedItem(Panel_TraCuuDiaLyQuocGia, HOVER_COLOR);
+        addPanel(new TraCuuDiaLyQuocGiaPanel());
+    }//GEN-LAST:event_Panel_TraCuuDiaLyQuocGiaMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -389,11 +428,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel Panel_Item_ThongKeCovid;
     private javax.swing.JPanel Panel_Item_TraCuuCovid;
     private javax.swing.JPanel Panel_TraCuuDiaLy;
+    private javax.swing.JPanel Panel_TraCuuDiaLyQuocGia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     // End of variables declaration//GEN-END:variables
 }
