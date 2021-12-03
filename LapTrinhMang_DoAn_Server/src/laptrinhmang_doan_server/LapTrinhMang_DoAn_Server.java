@@ -119,7 +119,16 @@ public class LapTrinhMang_DoAn_Server {
         }
         //kết quả trả về của các hàm là 1 chuỗi Json
         private String thongKeCovid(){
+            String link= "https://api.covid19api.com/summary?fbclid=IwAR1_tWgj33sVBFZWdd_zy82h5RbEpTbtcz884BVbIk7kdQ_q1PWaLTwvonM";
+            try {
+                Connection.Response res=Jsoup.connect(link).ignoreContentType(true)
+                        .method(Connection.Method.GET)
+                        .execute();
+            } catch (Exception e) {
+            }
+            
             String xuatKetQua = "";
+            
             //Xử lý tại đây
             
             return xuatKetQua;
