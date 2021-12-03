@@ -100,21 +100,42 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        searchComponent1 = new laptrinhmang_doan.SearchComponent();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        PanelPieChart = new javax.swing.JPanel();
-        PanelLineChart = new javax.swing.JPanel();
-        PanelBarChart = new javax.swing.JPanel();
+        PanelAllCovid = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        BieuDolabel = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        soCaTulabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        tenQGlabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        soCaNhiemlabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        soCaNhiemHQlabel = new javax.swing.JLabel();
+        nameQGlabel = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1130, 840));
         setLayout(null);
+        add(searchComponent1);
+        searchComponent1.setBounds(80, 0, 970, 41);
 
         jPanel1.setBackground(new java.awt.Color(51, 204, 0));
         jPanel1.setLayout(new java.awt.BorderLayout());
         add(jPanel1);
-        jPanel1.setBounds(31, 19, 330, 285);
+        jPanel1.setBounds(31, 19, 0, 0);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setPreferredSize(new java.awt.Dimension(1130, 840));
@@ -124,33 +145,132 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jPanel4.setLayout(new java.awt.BorderLayout());
         jPanel3.add(jPanel4);
         jPanel4.setBounds(31, 19, 0, 0);
+        jPanel3.add(PanelAllCovid);
+        PanelAllCovid.setBounds(0, 0, 1130, 330);
 
-        PanelPieChart.setBackground(new java.awt.Color(204, 204, 204));
-        PanelPieChart.setLayout(new java.awt.BorderLayout());
-        jPanel3.add(PanelPieChart);
-        PanelPieChart.setBounds(30, 20, 330, 285);
+        jPanel2.setLayout(null);
 
-        PanelLineChart.setBackground(new java.awt.Color(204, 204, 204));
-        PanelLineChart.setLayout(new java.awt.BorderLayout());
-        jPanel3.add(PanelLineChart);
-        PanelLineChart.setBounds(400, 20, 330, 285);
+        jLabel3.setText("số ca nhiễm mới (14 ngày): ");
+        jPanel2.add(jLabel3);
+        jLabel3.setBounds(20, 20, 250, 20);
 
-        PanelBarChart.setBackground(new java.awt.Color(204, 204, 204));
-        PanelBarChart.setLayout(new java.awt.BorderLayout());
-        jPanel3.add(PanelBarChart);
-        PanelBarChart.setBounds(770, 20, 330, 285);
+        BieuDolabel.setText(" ");
+        jPanel2.add(BieuDolabel);
+        BieuDolabel.setBounds(20, 50, 270, 90);
+
+        jLabel4.setText("dd/mm/yy-dd/mm/yy: +000000");
+        jPanel2.add(jLabel4);
+        jLabel4.setBounds(20, 150, 290, 40);
+
+        jPanel3.add(jPanel2);
+        jPanel2.setBounds(410, 330, 300, 200);
+
+        jPanel5.setLayout(null);
+
+        jLabel5.setText("Số ca tử vong: ");
+        jPanel5.add(jLabel5);
+        jLabel5.setBounds(20, 10, 110, 30);
+
+        soCaTulabel.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        soCaTulabel.setText("00000");
+        jPanel5.add(soCaTulabel);
+        soCaTulabel.setBounds(20, 60, 180, 60);
+
+        jLabel6.setText("Số ca ghi nhận ngày hôm qua:");
+        jPanel5.add(jLabel6);
+        jLabel6.setBounds(20, 150, 230, 30);
+
+        jLabel7.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel7.setText("0000");
+        jPanel5.add(jLabel7);
+        jLabel7.setBounds(250, 150, 70, 30);
+
+        jPanel3.add(jPanel5);
+        jPanel5.setBounds(780, 330, 320, 200);
+
+        jPanel6.setLayout(null);
+
+        tenQGlabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        tenQGlabel.setText("Quốc gia: ");
+        jPanel6.add(tenQGlabel);
+        tenQGlabel.setBounds(10, 10, 120, 40);
+
+        jLabel2.setText("Tổng số ca nhiễm:");
+        jPanel6.add(jLabel2);
+        jLabel2.setBounds(10, 50, 150, 20);
+
+        soCaNhiemlabel.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        soCaNhiemlabel.setText("00000000");
+        jPanel6.add(soCaNhiemlabel);
+        soCaNhiemlabel.setBounds(10, 80, 200, 40);
+
+        jLabel1.setText("Số ca nhiễm hôm qua: ");
+        jPanel6.add(jLabel1);
+        jLabel1.setBounds(10, 160, 170, 30);
+
+        soCaNhiemHQlabel.setText("+000000");
+        jPanel6.add(soCaNhiemHQlabel);
+        soCaNhiemHQlabel.setBounds(180, 160, 90, 30);
+
+        nameQGlabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        nameQGlabel.setText("$Name");
+        jPanel6.add(nameQGlabel);
+        nameQGlabel.setBounds(140, 10, 150, 40);
+
+        jPanel3.add(jPanel6);
+        jPanel6.setBounds(40, 330, 300, 200);
+
+        jPanel7.setLayout(null);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel8.setText("Biểu đồ số ca nhiễm");
+        jPanel7.add(jLabel8);
+        jLabel8.setBounds(10, 10, 230, 40);
+
+        jPanel3.add(jPanel7);
+        jPanel7.setBounds(0, 530, 550, 260);
+
+        jPanel8.setLayout(null);
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel9.setText("Biểu đồ số ca tử vong");
+        jPanel8.add(jLabel9);
+        jLabel9.setBounds(20, 10, 260, 40);
+
+        jPanel3.add(jPanel8);
+        jPanel8.setBounds(550, 530, 580, 260);
 
         add(jPanel3);
-        jPanel3.setBounds(0, 0, 1130, 840);
+        jPanel3.setBounds(0, 50, 1130, 790);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel PanelBarChart;
-    private javax.swing.JPanel PanelLineChart;
-    private javax.swing.JPanel PanelPieChart;
+    private javax.swing.JLabel BieuDolabel;
+    private javax.swing.JPanel PanelAllCovid;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JLabel nameQGlabel;
+    private laptrinhmang_doan.SearchComponent searchComponent1;
+    private javax.swing.JLabel soCaNhiemHQlabel;
+    private javax.swing.JLabel soCaNhiemlabel;
+    private javax.swing.JLabel soCaTulabel;
+    private javax.swing.JLabel tenQGlabel;
     // End of variables declaration//GEN-END:variables
 }
