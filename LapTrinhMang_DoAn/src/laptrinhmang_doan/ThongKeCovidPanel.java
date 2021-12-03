@@ -1,7 +1,11 @@
 package laptrinhmang_doan;
 
+import EventComponentCustomize.SearchCallBack;
+import EventComponentCustomize.SearchEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -20,6 +24,8 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         showPieChart();
         showLineChart();
         showBarChart();
+        searchComponent1.hintText = "Nhập vào tên quốc gia ...";
+
     }
 
     public void showPieChart(){
@@ -105,6 +111,7 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         PanelAllCovid = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         BieuDolabel = new javax.swing.JLabel();
@@ -125,6 +132,7 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1130, 840));
@@ -145,8 +153,16 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jPanel4.setLayout(new java.awt.BorderLayout());
         jPanel3.add(jPanel4);
         jPanel4.setBounds(31, 19, 0, 0);
+
+        PanelAllCovid.setLayout(null);
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/covid.png"))); // NOI18N
+        jLabel10.setText("jLabel10");
+        PanelAllCovid.add(jLabel10);
+        jLabel10.setBounds(0, 0, 1130, 270);
+
         jPanel3.add(PanelAllCovid);
-        PanelAllCovid.setBounds(0, 0, 1130, 330);
+        PanelAllCovid.setBounds(0, 0, 1130, 270);
 
         jPanel2.setLayout(null);
 
@@ -163,7 +179,7 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jLabel4.setBounds(20, 150, 290, 40);
 
         jPanel3.add(jPanel2);
-        jPanel2.setBounds(410, 330, 300, 200);
+        jPanel2.setBounds(410, 270, 300, 200);
 
         jPanel5.setLayout(null);
 
@@ -187,7 +203,7 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jLabel7.setBounds(250, 150, 70, 30);
 
         jPanel3.add(jPanel5);
-        jPanel5.setBounds(780, 330, 320, 200);
+        jPanel5.setBounds(780, 270, 320, 200);
 
         jPanel6.setLayout(null);
 
@@ -219,14 +235,14 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         nameQGlabel.setBounds(140, 10, 150, 40);
 
         jPanel3.add(jPanel6);
-        jPanel6.setBounds(40, 330, 300, 200);
+        jPanel6.setBounds(40, 270, 300, 200);
 
         jPanel7.setLayout(null);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel8.setText("Biểu đồ số ca nhiễm");
+        jLabel8.setText("Số ca nhiễm");
         jPanel7.add(jLabel8);
-        jLabel8.setBounds(10, 10, 230, 40);
+        jLabel8.setBounds(10, 10, 150, 40);
 
         jPanel3.add(jPanel7);
         jPanel7.setBounds(0, 530, 550, 260);
@@ -234,12 +250,17 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         jPanel8.setLayout(null);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel9.setText("Biểu đồ số ca tử vong");
+        jLabel9.setText("Số ca tử vong");
         jPanel8.add(jLabel9);
-        jLabel9.setBounds(20, 10, 260, 40);
+        jLabel9.setBounds(20, 10, 170, 40);
 
         jPanel3.add(jPanel8);
         jPanel8.setBounds(550, 530, 580, 260);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel11.setText("Biểu đồ");
+        jPanel3.add(jLabel11);
+        jLabel11.setBounds(10, 470, 170, 60);
 
         add(jPanel3);
         jPanel3.setBounds(0, 50, 1130, 790);
@@ -250,6 +271,8 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
     private javax.swing.JLabel BieuDolabel;
     private javax.swing.JPanel PanelAllCovid;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
