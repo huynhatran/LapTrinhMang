@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import org.json.simple.JSONArray;
@@ -184,8 +185,14 @@ public class LapTrinhMang_DoAn_Server {
                     });
                     arrayObject = new JSONArray();
                     for (JSONObject obj : list) {
-                        arrayObject.add(obj);
+                        JSONObject newObject = new JSONObject();//bước này để lấy phần ngày tháng năm, bỏ đi sau chữ T
+                        newObject.put("NewConfirmed", obj.get("NewConfirmed"));
+                        newObject.put("NewRecovered", obj.get("NewRecovered"));
+                        newObject.put("NewDeaths", obj.get("NewDeaths"));
+                        newObject.put("Date", DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH).format(LocalDate.parse(new StringTokenizer(obj.get("Date").toString(), "T").nextToken())));
+                        arrayObject.add(newObject);
                     }
+                    
                     jsonXuat.put("ThongKeBayNgay", arrayObject);
                     //arrayObject.add(arrayTG.get(arrayTG.size()-1));
                     jsonXuat.put("status", "success");
@@ -235,7 +242,7 @@ public class LapTrinhMang_DoAn_Server {
                     newObject.put("NewConfirmed", NewConfirmed);
                     newObject.put("NewRecovered", NewRecovered);
                     newObject.put("NewDeaths", NewDeaths);
-                    newObject.put("Date", new StringTokenizer(ob2.get("Date").toString(), "T").nextToken());
+                    newObject.put("Date", DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH).format(LocalDate.parse(new StringTokenizer(ob2.get("Date").toString(), "T").nextToken())));
                     arrayTKBayNgay.add(newObject);
                 }
                 jsonXuat.put("ThongKeBayNgay", arrayTKBayNgay);
@@ -289,7 +296,7 @@ public class LapTrinhMang_DoAn_Server {
                         newObject.put("Deaths", Deaths);
                         newObject.put("Recovered", Recovered);
                         //newObject.put("Active", getObjectArray.get("Active"));
-                        newObject.put("Date", new StringTokenizer(ob2.get("Date").toString(), "T").nextToken());
+                        newObject.put("Date", DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH).format(LocalDate.parse(new StringTokenizer(ob2.get("Date").toString(), "T").nextToken())));
                         mangXuat.add(newObject);
                     }
                 }else{

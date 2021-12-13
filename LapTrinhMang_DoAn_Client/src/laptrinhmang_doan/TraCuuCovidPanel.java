@@ -194,7 +194,6 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
 
         Combobox_QuocGia.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Combobox_QuocGia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        Combobox_QuocGia.setSelectedIndex(-1);
         Combobox_QuocGia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Combobox_QuocGiaActionPerformed(evt);
@@ -350,25 +349,31 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
         if(Combobox_QuocGia.getSelectedIndex()!=0){
             try{
                 Date getdate1 = Date_TuNgay.getDate();
-                long d1 = getdate1.getTime();
                 Date getdate2 = Date_DenNgay.getDate();
+                
                 Date today = new Date();
                 if(getdate2.after(today)){
-                    getdate2 = today;
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày kết thúc nhỏ hơn hoặc bằng hôm nay!");
+                }else{
+                    if(getdate1.after(getdate2) || getdate1.toString().equals(getdate2.toString())){
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày sau lớn hơn ngày trước!");
+                    }else{
+                        long d1 = getdate1.getTime();
+                        long d2 = getdate2.getTime();
+                        java.sql.Date tuNgay = new java.sql.Date(d1);
+                        java.sql.Date denNgay = new java.sql.Date(d2);
+
+                        //System.out.println(Combobox_QuocGia.getSelectedItem());
+                        //gửi yêu cầu tới server lấy kết quả tìm kiếm theo ngày
+                        String tenChucNang = "tracuucovid#"+Combobox_QuocGia.getItemAt(Combobox_QuocGia.getSelectedIndex())+"#"+tuNgay.toString()+"#"+denNgay.toString();
+
+                        MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES(tenChucNang, MainFrame._SESSION_KEY));
+
+                        //giả mã kết quả tìm kiếm theo ngày nhận được từ server
+                        checkFunction(MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY));
+                        Label_QuocGia.setText(Combobox_QuocGia.getSelectedItem().toString());
+                    }
                 }
-                long d2 = getdate2.getTime();
-                java.sql.Date tuNgay = new java.sql.Date(d1);
-                java.sql.Date denNgay = new java.sql.Date(d2);
-
-                //System.out.println(Combobox_QuocGia.getSelectedItem());
-                //gửi yêu cầu tới server lấy kết quả tìm kiếm theo ngày
-                String tenChucNang = "tracuucovid#"+Combobox_QuocGia.getItemAt(Combobox_QuocGia.getSelectedIndex())+"#"+tuNgay.toString()+"#"+denNgay.toString();
-
-                MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES(tenChucNang, MainFrame._SESSION_KEY));
-
-                //giả mã kết quả tìm kiếm theo ngày nhận được từ server
-                checkFunction(MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY));
-                Label_QuocGia.setText(Combobox_QuocGia.getSelectedItem().toString());
             }catch(Exception e){//NullPointerException
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày đúng định dạng DD-MM-YYYY!\nVí dụ: 02-12-2021");
             }

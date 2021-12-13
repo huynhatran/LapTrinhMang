@@ -8,6 +8,8 @@ import java.awt.HeadlessException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -40,6 +42,8 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
     DefaultTableModel modelTable;
     String clickButtonColor = "#3399FF";
     String ButtonColor = "#999999";
+    ArrayList<JSONObject> listSortTable;
+    Vector header;
     
     public ThongKeCovidPanel() {
         initComponents();
@@ -158,15 +162,24 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
             JSONParser parse = new JSONParser();
             JSONObject data = (JSONObject) parse.parse(ketquaNhan);
             if(data.get("status").equals("success")){
-                Vector header = new Vector();
+                header = new Vector();
+                listSortTable = new ArrayList<>();
                 if(data.get("function").toString().equals("tracuucovidthegioi")){
                     Label_Title.setText("Thế Giới");
                     arr = (JSONArray) data.get("TheGioi");
                     header.add("Quốc gia");
+                    //đưa vô list để sau này dùng cho chức năng sort, arr.size - 1 vì cuối mảng là thống kê chung cho TG, mình ko đưa nó vào table
+                    for(int i = 0;i<arr.size()-1;i++){
+                        listSortTable.add((JSONObject) arr.get(i));
+                    }
                 }else{
                     Label_Title.setText("Việt Nam");
                     arr = (JSONArray) data.get("VietNam");
                     header.add("Tỉnh thành");
+                    //đưa vô list để sau này dùng cho chức năng sort, arr.size - 1 vì cuối mảng là thống kê chung cho TG, mình ko đưa nó vào table
+                    for(int i = 0;i<arr.size()-1;i++){
+                        listSortTable.add((JSONObject) arr.get(i));
+                    }
                 }
                 //card
                 JSONObject getLastArray = (JSONObject) arr.get(arr.size()-1);//thống kê chung của TG/VN nằm cuối mảng
@@ -180,40 +193,10 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
                 header.add("Số ca hồi phục trong ngày");
                 header.add("Tử vong trong ngày");
                 
-                modelTable = new DefaultTableModel(header,0);
-                
-                for(int i = 0;i<arr.size()-1;i++) {
-                    JSONObject object = (JSONObject) arr.get(i);
-                    Vector row = new Vector();
-                    row.add(object.get("province_name").toString());
-                    row.add(object.get("confirmed").toString());
-                    row.add(object.get("recovered").toString());
-                    row.add(object.get("deaths").toString());
-                    row.add(object.get("increase_confirmed").toString());
-                    row.add(object.get("increase_recovered").toString());
-                    row.add(object.get("increase_deaths").toString());
-                    
-//                    row.add(dinhDangSo(Float.parseFloat(object.get("increase_confirmed").toString())));
-//                    row.add(dinhDangSo(Float.parseFloat(object.get("increase_recovered").toString())));
-//                    row.add(dinhDangSo(Float.parseFloat(object.get("increase_deaths").toString())));
-//                    row.add(dinhDangSo(Float.parseFloat(object.get("confirmed").toString())));
-//                    row.add(dinhDangSo(Float.parseFloat(object.get("recovered").toString())));
-//                    row.add(dinhDangSo(Float.parseFloat(object.get("deaths").toString())));
-                    modelTable.addRow(row);
-                }
-               table.setModel(modelTable);
+                sortByColume(Combobox_ColumeName.getSelectedItem().toString());//mặc định lấy lên sẽ sắp xếp giảm dần theo tổng số ca mắc
                //chart
                JSONArray arrayChart = (JSONArray) data.get("ThongKeBayNgay");
-                showLineChart(arrayChart);
-                
-//                showLineChart(new StringTokenizer(((JSONObject) arrayChart.get(0)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(0)).get("NewConfirmed").toString()),
-//                            new StringTokenizer(((JSONObject) arrayChart.get(1)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(1)).get("NewConfirmed").toString()),
-//                            new StringTokenizer(((JSONObject) arrayChart.get(2)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(2)).get("NewConfirmed").toString()),
-//                            new StringTokenizer(((JSONObject) arrayChart.get(3)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(3)).get("NewConfirmed").toString()),
-//                            new StringTokenizer(((JSONObject) arrayChart.get(4)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(4)).get("NewConfirmed").toString()),
-//                            new StringTokenizer(((JSONObject) arrayChart.get(5)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(5)).get("NewConfirmed").toString()),
-//                            new StringTokenizer(((JSONObject) arrayChart.get(6)).get("Date").toString(), "T").nextToken(),Double.parseDouble(((JSONObject) arrayChart.get(6)).get("NewConfirmed").toString()));
-//                //new SimpleDateFormat("dd/MM/yyyy").parse(new StringTokenizer(((JSONObject) arrayChart.get(6)).get("Date").toString(), "T").nextToken()).toString(),7.0);
+               showLineChart(arrayChart);
             }else{
                 if(data.get("status").equals("updating")){
                     //tạo frame đang update dữ liệu
@@ -233,12 +216,62 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         table.getTableHeader().setForeground(Color.BLACK);
         table.getTableHeader().setBackground(Color.decode("#00CCFF"));
         table.getTableHeader().setFont(new Font("Tahoma", 1, 13));
-        //table.setFont(new Font("Tahoma", 1, 13));
         table.setRowHeight(30);
-//        table.setSelectionBackground(new Color(255, 255, 0));//màu nền khi click chuột vào một row trên table
-//        table.setGridColor(Color.decode("#00CCFF"));
-//        table.getColumnModel().getColumn(0).setPreferredWidth(40);//độ rộng của cột
-//        table.getColumnModel().getColumn(2).setPreferredWidth(60);
+    }
+    
+    //Tổng số ca mắc, Tổng số ca hồi phục, Tổng số ca tử vong, Số ca mới trong ngày, Số ca hồi phục trong ngày, Tử vong trong ngày
+    public void sortByColume(String columeName){
+        switch(columeName){
+            case "Tổng số ca mắc":
+                getSortByName("confirmed");
+                break;
+            case "Tổng số ca hồi phụ":
+                getSortByName("recovered");
+                break;
+            case "Tổng số ca tử vong":
+                getSortByName("deaths");
+                break;
+            case "Số ca mới trong ngày":
+                getSortByName("increase_confirmed");
+                break;
+            case "Số ca hồi phục trong ngày":
+                getSortByName("increase_recovered");
+                break;
+            case "Tử vong trong ngày":
+                getSortByName("increase_deaths");
+                break;     
+        }
+    }
+    //truyền tên Key cần sort trong arrayJson
+    public void getSortByName(String name){
+        //sort lại list theo đối tượng
+        Collections.sort(listSortTable, new Comparator<JSONObject>() {
+            @Override
+                public int compare(JSONObject o1, JSONObject o2) {
+                    long v1 = (long) o1.get(name);
+                    long v2 = (long) o2.get(name);
+                    if(Combobox_TangGiam.getSelectedItem().toString().equalsIgnoreCase("Tăng dần")){
+                        return (int) (v1 - v2);
+                    }
+                    //giảm dần
+                    return (int) (v2 - v1);
+                }
+        });
+        //set data lại cho table
+        modelTable = new DefaultTableModel(header,0);
+                
+        for(JSONObject object : listSortTable) {
+            Vector row = new Vector();
+            row.add(object.get("province_name").toString());
+            row.add(dinhDangSo(Float.parseFloat(object.get("confirmed").toString())));//format có dấu phẩ ở hàng nhìn cho số
+            row.add(dinhDangSo(Float.parseFloat(object.get("recovered").toString())));
+            row.add(dinhDangSo(Float.parseFloat(object.get("deaths").toString())));
+            row.add(dinhDangSo(Float.parseFloat(object.get("increase_confirmed").toString())));
+            row.add(dinhDangSo(Float.parseFloat(object.get("increase_recovered").toString())));
+            row.add(dinhDangSo(Float.parseFloat(object.get("increase_deaths").toString())));
+            modelTable.addRow(row);
+        }
+       table.setModel(modelTable);
     }
     public void setDataCard(JSONObject ob){
         //chung
@@ -291,8 +324,8 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         table = new javax.swing.JTable();
         Button_VietNam = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        Combobox_ColumeName = new javax.swing.JComboBox<>();
+        Combobox_TangGiam = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         Button_TheGioi = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -372,12 +405,12 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         PanelLineChart.setBackground(new java.awt.Color(204, 204, 204));
         PanelLineChart.setLayout(new java.awt.BorderLayout());
         jPanel6.add(PanelLineChart);
-        PanelLineChart.setBounds(20, 0, 810, 250);
+        PanelLineChart.setBounds(20, 0, 850, 250);
 
         PanelPieChart.setBackground(new java.awt.Color(204, 204, 204));
         PanelPieChart.setLayout(new java.awt.BorderLayout());
         jPanel6.add(PanelPieChart);
-        PanelPieChart.setBounds(840, 0, 250, 250);
+        PanelPieChart.setBounds(870, 0, 230, 250);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -420,9 +453,19 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tổng số ca mắc", "Tổng số ca hồi phục", "Tổng số ca tử vong", "Số ca mới trong ngày", "Số ca hồi phục trong ngày", "Tử vong trong ngày" }));
+        Combobox_ColumeName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tổng số ca mắc", "Tổng số ca hồi phục", "Tổng số ca tử vong", "Số ca mới trong ngày", "Số ca hồi phục trong ngày", "Tử vong trong ngày" }));
+        Combobox_ColumeName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Combobox_ColumeNameActionPerformed(evt);
+            }
+        });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giảm dần", "Tăng dần" }));
+        Combobox_TangGiam.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giảm dần", "Tăng dần" }));
+        Combobox_TangGiam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Combobox_TangGiamActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel4.setText("Sắp xếp:");
@@ -466,9 +509,9 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Combobox_ColumeName, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Combobox_TangGiam, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1057, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 43, Short.MAX_VALUE))
         );
@@ -477,9 +520,9 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Combobox_ColumeName, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Combobox_TangGiam, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(Button_VietNam, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Button_TheGioi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -541,10 +584,22 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         //cardPanel3.setLabel_Sub("al");
     }//GEN-LAST:event_Button_VietNamMouseClicked
 
+    private void Combobox_ColumeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Combobox_ColumeNameActionPerformed
+        //gọi hàm sort
+        sortByColume(Combobox_ColumeName.getSelectedItem().toString());
+    }//GEN-LAST:event_Combobox_ColumeNameActionPerformed
+
+    private void Combobox_TangGiamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Combobox_TangGiamActionPerformed
+        //gọi hàm sort
+        sortByColume(Combobox_ColumeName.getSelectedItem().toString());
+    }//GEN-LAST:event_Combobox_TangGiamActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Button_TheGioi;
     private javax.swing.JPanel Button_VietNam;
+    private javax.swing.JComboBox<String> Combobox_ColumeName;
+    private javax.swing.JComboBox<String> Combobox_TangGiam;
     private javax.swing.JLabel Label_Title;
     private javax.swing.JPanel PanelLineChart;
     private javax.swing.JPanel PanelPieChart;
@@ -553,8 +608,6 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
     private laptrinhmang_doan.CardPanel cardPanel2;
     private laptrinhmang_doan.CardPanel cardPanel3;
     private laptrinhmang_doan.CardPanel cardPanel4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
