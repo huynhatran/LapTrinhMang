@@ -134,7 +134,9 @@ public class LapTrinhMang_DoAn_Server {
         }
         
         private String traCuuCovid(String tenQuocGia, String ngayBatDau, String ngayKetThuc){
-            String link = "https://api.covid19api.com/country/vietnam?from="+ngayBatDau+"&to="+ngayKetThuc;//2021-05-05T00:00:00Z
+        
+            String link = "https://api.covid19api.com/country/"+tenQuocGia+"?from="+ngayBatDau+"&to="+ngayKetThuc;//2021-05-05T00:00:00Z
+            JSONArray mangXuat = new JSONArray();
             jsonXuat = new  JSONObject();
             try{
                 Connection.Response res = Jsoup.connect(link)
@@ -142,18 +144,23 @@ public class LapTrinhMang_DoAn_Server {
                         .method(Connection.Method.GET)
                         .execute();
                 parse = new JSONParser();
-                JSONArray data = (JSONArray) parse.parse(res.body());
-                if(data.size()>0){
-                    
-                }else{
-                    jsonXuat.put("status", "fail");
-                    return jsonXuat.toString();
+                JSONArray arr = (JSONArray) parse.parse(res.body());
+                for(int i = 0; i<arr.size();i++)
+                {
+                    JSONObject getObjectArray = (JSONObject) arr.get(i);
+                    JSONObject newObject = new JSONObject();
+                    newObject.put("Confirmed", getObjectArray.get("Confirmed"));
+                    newObject.put("Deaths", getObjectArray.get("Deaths"));
+                    newObject.put("Recovered", getObjectArray.get("Recovered"));
+                    newObject.put("Active", getObjectArray.get("Active"));
+                    mangXuat.add(newObject);
                 }
             }catch(IOException | ParseException e){
                 jsonXuat.put("status", "fail");
-                return jsonXuat.toString();
+                return "Lỗi từ phía server." + e.getMessage();
             }
             jsonXuat.put("status", "success");
+            jsonXuat.put("Solieu", mangXuat);
             jsonXuat.put("function", "tracuucovid");
             return jsonXuat.toString();
         }
