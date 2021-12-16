@@ -20,11 +20,13 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,57 +41,13 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
     String tenQuocGia = "";
     public TraCuuDiaLyQuocGiaPanel() {
         initComponents();
-        menu.add(listPanel);
         jLabel30.getCursor();
-        searchComponent1.hintText = "Nhập vào tên quốc gia cần tìm ...";
         
-        searchComponent1.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(searchComponent1.getText().isEmpty()){
-                    menu.setVisible(false);
-                }else{
-                    showJList(searchComponent1.getText());
-                }
-            }
-        });
         //gửi yêu cầu tới server lấy danh sách quốc gia
         MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES("danhsachquocgia#", MainFrame._SESSION_KEY));
         //giả mã danh sách quốc gia nhận được từ server
         checkFunction(MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY));
-
-        searchComponent1.addEvent(new SearchEvent() {
-            @Override
-            public void onPressed(SearchCallBack call) {
-                if(!searchComponent1.getText().isEmpty()){
-                    //gửi yêu cầu tới server lấy danh sách quốc gia
-                    MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES("tracuudialyquocgia#"+searchComponent1.getText(), MainFrame._SESSION_KEY));
-                    //giả mã danh sách quốc gia nhận được từ server
-                    String nhan = MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY);
-                    call.done();
-                    checkFunction(nhan);
-                    
-                }else{
-                    call.done();
-                    JOptionPane.showMessageDialog(null, "Vui lòng nhập quốc gia cần tìm.");
-                }
-            }
-
-            @Override
-            public void onCancel() {
-                
-            }
-        });
-        
+        AutoCompleteDecorator.decorate(Combobox_DanhSachQuocGia);
     }
 
     private void checkFunction(String string){
@@ -105,20 +63,22 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
                     Label_KetQuTimKiem.setText("Kết quả tìm kiếm");
                     traCuuQuocGia(data);
                     break;
-                
             }
         } catch (ParseException ex) {
             ex.getMessage();
         }
-        
     }
     public void danhSachQuocGia(JSONObject json){
+        DefaultComboBoxModel modelComobox = new DefaultComboBoxModel();
         traCuuQuocGia(json);
         JSONArray arr = (JSONArray) json.get("geonames");
+        
         for(int i=0;i<arr.size();i++){
             JSONObject getObjectArray = (JSONObject) arr.get(i);
-            list.add(getObjectArray.get("countryName").toString());
+            modelComobox.addElement(getObjectArray.get("countryName").toString());
         }
+        Combobox_DanhSachQuocGia.setModel(modelComobox);
+        Combobox_DanhSachQuocGia.setSelectedItem(tenQuocGia);
     }
     public void traCuuQuocGia(JSONObject json){
         String status = json.get("status").toString();
@@ -137,26 +97,11 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
             Label_ChauLuc.setText(json.get("continentName").toString());
             txt_QuocGiaLienKe.setText(json.get("neighbours").toString());
             
-            
         }else{
             JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả!");
         }
     }
-    public void showJList(String searchInput){
-        DefaultListModel jListModel = new DefaultListModel();
-        for(String str : list){
-            if(str.toLowerCase().contains(searchInput.toLowerCase())){
-                jListModel.addElement(str);
-            }
-        }
-        jList1.setModel(jListModel);
-        if(jList1.getVisibleRowCount()>0){
-            menu.setVisible(true);
-            menu.show(searchComponent1, 20, searchComponent1.getHeight());
-        }else{
-            menu.setVisible(false);
-        }
-    }
+    
     private void setImageNationalFlag(JLabel lable, String urlImage, int width, int hieght){
         try {
             URL url = new URL(urlImage);
@@ -193,10 +138,6 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menu = new javax.swing.JPopupMenu();
-        listPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -234,36 +175,8 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
         jLabel37 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         label_NgonNgu = new javax.swing.JTextArea();
-        searchComponent1 = new laptrinhmang_doan.SearchComponent();
-
-        menu.setFocusable(false);
-
-        listPanel.setPreferredSize(new java.awt.Dimension(1067, 187));
-
-        jList1.setFont(new java.awt.Font("Times New Roman", 3, 16)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "a", "b", "c" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jList1MousePressed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jList1);
-
-        javax.swing.GroupLayout listPanelLayout = new javax.swing.GroupLayout(listPanel);
-        listPanel.setLayout(listPanelLayout);
-        listPanelLayout.setHorizontalGroup(
-            listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1067, Short.MAX_VALUE)
-        );
-        listPanelLayout.setVerticalGroup(
-            listPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-        );
+        Combobox_DanhSachQuocGia = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
 
@@ -309,11 +222,14 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel49))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(labelBanDo, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel49))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(labelBanDo, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,8 +267,7 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel11Layout.createSequentialGroup()
@@ -383,7 +298,7 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
                 .addGroup(jPanel11Layout.createSequentialGroup()
                     .addGap(35, 35, 35)
                     .addComponent(jLabel50)
-                    .addContainerGap(390, Short.MAX_VALUE)))
+                    .addContainerGap(434, Short.MAX_VALUE)))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -596,6 +511,25 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
 
         jScrollPane2.setViewportView(jPanel1);
 
+        Combobox_DanhSachQuocGia.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Combobox_DanhSachQuocGia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Combobox_DanhSachQuocGia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Combobox_DanhSachQuocGiaActionPerformed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(0, 153, 255));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/search-textfield-24.png"))); // NOI18N
+        jButton1.setText("Tìm kiếm");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -603,48 +537,51 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1128, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchComponent1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Combobox_DanhSachQuocGia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(searchComponent1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Combobox_DanhSachQuocGia)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jList1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MousePressed
-        if (jList1.getSelectedIndex() != -1 && !jList1.getSelectedValue().isEmpty()) {
-            menu.setVisible(false);
-            //menu.hide();
-            searchComponent1.setText(jList1.getSelectedValue());
-            
-            if(!searchComponent1.getText().isEmpty()){
-                //gửi yêu cầu tới server lấy danh sách quốc gia
-                MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES("tracuudialyquocgia#"+searchComponent1.getText(), MainFrame._SESSION_KEY));
-                //giả mã danh sách quốc gia nhận được từ server
-                String nhan = MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY);
-                searchComponent1.doneCallback();
-                checkFunction(nhan);
-
-            }else{
-                searchComponent1.doneCallback();
-                JOptionPane.showMessageDialog(null, "Vui lòng nhập quốc gia cần tìm.");
-            }
-        }
-    }//GEN-LAST:event_jList1MousePressed
 
     private void jLabel30MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel30MouseClicked
         ReviewFrame reviewFrame = new ReviewFrame(toUpperCaseString(tenQuocGia));
     }//GEN-LAST:event_jLabel30MouseClicked
 
+    private void Combobox_DanhSachQuocGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Combobox_DanhSachQuocGiaActionPerformed
+        
+    }//GEN-LAST:event_Combobox_DanhSachQuocGiaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(!Combobox_DanhSachQuocGia.getSelectedItem().toString().isEmpty()){
+            //gửi yêu cầu tới server lấy danh sách quốc gia
+            MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES("tracuudialyquocgia#"+Combobox_DanhSachQuocGia.getSelectedItem().toString(), MainFrame._SESSION_KEY));
+            //giả mã danh sách quốc gia nhận được từ server
+            String nhan = MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY);
+            
+            checkFunction(nhan);
+        }else{
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn quốc gia cần tìm.");
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> Combobox_DanhSachQuocGia;
     private javax.swing.JLabel Label_ChauLuc;
     private javax.swing.JLabel Label_KetQuTimKiem;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -659,7 +596,6 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel50;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -667,7 +603,6 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -681,9 +616,6 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
     private javax.swing.JLabel label_ThuDo;
     private javax.swing.JLabel label_TienTe;
     private javax.swing.JLabel label_ToaDo;
-    private javax.swing.JPanel listPanel;
-    private javax.swing.JPopupMenu menu;
-    private laptrinhmang_doan.SearchComponent searchComponent1;
     private javax.swing.JTextArea txt_QuocGiaLienKe;
     // End of variables declaration//GEN-END:variables
 }

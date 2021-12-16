@@ -319,22 +319,7 @@ public class LapTrinhMang_DoAn_Server {
             
             return jsonXuat.toString();
         }
-        ///ko sử dụng
-        private String danhSachThanhPho(){
-            String linkJson = "https://countriesnow.space/api/v0.1/countries/population/cities?fbclid=IwAR0cR4DLQN_MYC_rY3HcwbJBEWFvjD1ZxLaW5w_qlBweWiCq6XeKEeoM5Uo";
-            try{
-                Connection.Response res = Jsoup.connect(linkJson)
-                        .ignoreContentType(true)
-                        .method(Connection.Method.GET)
-                        .execute();
-                parse = new JSONParser();
-                JSONArray data = (JSONArray) parse.parse(res.body());
-                
-            }catch(IOException | ParseException e){
-                return "Lỗi từ phía server.";
-            }
-            return "";
-        }
+        
         private String thanhPhoHienTai(){
             String linkJson = "https://spott.p.rapidapi.com/places/ip/me";
             String linkJsoup = "https://weather.com/vi-VN/weather/today/l/";
@@ -735,3 +720,20 @@ public class LapTrinhMang_DoAn_Server {
 //            return jsonXuat.toString();
 //        }
         ///
+
+///ko sử dụng
+//        private String danhSachThanhPho(){
+//            String linkJson = "https://countriesnow.space/api/v0.1/countries/population/cities?fbclid=IwAR0cR4DLQN_MYC_rY3HcwbJBEWFvjD1ZxLaW5w_qlBweWiCq6XeKEeoM5Uo";
+//            try{
+//                Connection.Response res = Jsoup.connect(linkJson)
+//                        .ignoreContentType(true)
+//                        .method(Connection.Method.GET)
+//                        .execute();
+//                parse = new JSONParser();
+//                JSONArray data = (JSONArray) parse.parse(res.body());
+//                
+//            }catch(IOException | ParseException e){
+//                return "Lỗi từ phía server.";
+//            }
+//            return "";
+//        }

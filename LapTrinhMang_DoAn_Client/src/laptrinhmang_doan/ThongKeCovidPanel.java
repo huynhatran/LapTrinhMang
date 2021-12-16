@@ -219,7 +219,7 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
             case "Tổng số ca mắc":
                 getSortByName("confirmed");
                 break;
-            case "Tổng số ca hồi phụ":
+            case "Tổng số ca hồi phục":
                 getSortByName("recovered");
                 break;
             case "Tổng số ca tử vong":
