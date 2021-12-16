@@ -54,9 +54,9 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
         LocalDate date = LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth());
         //trừ đi 6 ngày
         LocalDate ngayBatDau = date.minusYears(0).minusMonths(0).minusWeeks(0).minusDays(6);
-        Date today = new Date();
+        Date today = new Date(); 
         long d1 = today.getTime();
-        java.sql.Date denNgay = new java.sql.Date(d1);
+        java.sql.Date denNgay = new java.sql.Date(d1);// trả về định dạng 2005-02-02
         String tenChucNang = "tracuucovid#Vietnam#"+ngayBatDau.toString()+"#"+denNgay;
         
         MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES(tenChucNang, MainFrame._SESSION_KEY));
@@ -64,7 +64,7 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
         //giả mã kết quả tìm kiếm theo ngày nhận được từ server
         checkFunction(MainFrame._SERCURITY_CLIENT.giaiMaAES(MainFrame._CONNECT_SERVER.receiveData(), MainFrame._SESSION_KEY));
         Label_QuocGia.setText("Vietnam (7 ngày gần đây)");
-        //
+        //thư viện tìm kiếm trên combobox
         AutoCompleteDecorator.decorate(Combobox_QuocGia);
         
     }
@@ -346,7 +346,7 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(Combobox_QuocGia.getSelectedIndex()!=0){
+        if(Combobox_QuocGia.getSelectedIndex()>0){
             try{
                 Date getdate1 = Date_TuNgay.getDate();
                 Date getdate2 = Date_DenNgay.getDate();

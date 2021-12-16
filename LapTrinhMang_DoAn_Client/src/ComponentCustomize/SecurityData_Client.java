@@ -16,11 +16,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SercurityData_Client {
+public class SecurityData_Client {
     //2048
     String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA17vSQowcfTemnHrGzwPP36HX99okwnYjCoJQeCtFhSfDH60tEyzL/D6ECujflvMrUAYG6UfYtGWd9lTznn9Y+61NtJJ2aZecV9VACZi3Lt6rmmy4BapkbKgPk1Kdz/56ZJ04uFXVNEluSd13tjo5pbgnAXLpbyulL+Nmsk/g2l4hrBixOzB0chxTZLHgkQclPuiT0wutPOJRzWLg4iStDiFH9PiSDGsV2RYoDy8deCMR4nvly5LvcFBvH/BoCqg0kT1OcKOJ0qfhICdtsIawzY9q6eUz/FSn3oeE67svcyTfc0g8UT7IfopnaVirGWcFAI3cl8LQ1b6Jxm2S6d69HwIDAQAB";
     
-    public SercurityData_Client(){
+    public SecurityData_Client(){
         
     }
     

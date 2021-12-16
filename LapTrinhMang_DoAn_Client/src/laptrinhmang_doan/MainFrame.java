@@ -1,7 +1,7 @@
 package laptrinhmang_doan;
 
 import ComponentCustomize.ConnectServer;
-import ComponentCustomize.SercurityData_Client;
+import ComponentCustomize.SecurityData_Client;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,7 +21,7 @@ public class MainFrame extends javax.swing.JFrame {
     //hương thức java.util.UUID.randomUUID() được sử dụng để sinh ra một chuỗi ngẫu nhiên có độ dài 32 ký tự (128 bit)
     //được biểu diễn ở hệ hệ thập lục phân (hex: 0-9A-F) và 4 ký tự phân tách (–). ví dụ: ef41d4cb-5d1b-4a83-a4c1-f1397e3fcdb7
     public static final String _SESSION_KEY = UUID.randomUUID().toString();
-    public static final SercurityData_Client _SERCURITY_CLIENT = new SercurityData_Client();
+    public static final SecurityData_Client _SERCURITY_CLIENT = new SecurityData_Client();
     
     public MainFrame() {
         _CONNECT_SERVER.senData(_SERCURITY_CLIENT.maHoaRSA(_SESSION_KEY));

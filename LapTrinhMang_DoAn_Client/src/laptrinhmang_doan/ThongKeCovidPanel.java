@@ -56,12 +56,6 @@ public class ThongKeCovidPanel extends javax.swing.JPanel {
         
         styleTable(table);
         callServer("thongkecovidthegioi#");
-//        TableRowSorter<TableModel> sorter =  new TableRowSorter<> (table.getModel());
-//        table.setRowSorter(sorter);
-//        List<RowSorter.SortKey> sortKeys = new ArrayList<>(50);
-//        sortKeys.add(new RowSorter.SortKey(4, SortOrder.ASCENDING));
-//        //sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-//        sorter.setSortKeys(sortKeys);
     }
 
     public void callServer(String tenChucNang){

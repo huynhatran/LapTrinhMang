@@ -60,7 +60,7 @@ public class LapTrinhMang_DoAn_Server {
         private HttpURLConnection conn;
         private Scanner scanner;
         private String SESSION_KEY = "";
-        private SercurityData_Server sercurityData = new SercurityData_Server();
+        private SecurityData_Server sercurityData = new SecurityData_Server();
         private JSONParser parse;
         private JSONObject jsonXuat;
                 
@@ -100,6 +100,7 @@ public class LapTrinhMang_DoAn_Server {
                 System.err.println(e);
             }
         }
+        //tenchucnang#bien1#bien2
         private String Menu(String stringReceived){
             //cú pháp chức năng như sau: tenchucnang#Bien1#Bien2#Bien3
             System.out.println("chuỗi mã hóa nhận được: "+stringReceived);
@@ -143,6 +144,7 @@ public class LapTrinhMang_DoAn_Server {
         }
         //kết quả trả về của các hàm là 1 chuỗi Json
         private String thongKeCovidTheGioi(){
+            //lấy ngày tháng năm hiện tại
             LocalDateTime now = LocalDateTime.now();  
             LocalDate date = LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth());
             //trừ đi 7 ngày
@@ -165,6 +167,7 @@ public class LapTrinhMang_DoAn_Server {
                 }else{
                     JSONArray arrayTG = (JSONArray) data.get("TG");
                     jsonXuat.put("TheGioi", arrayTG);
+                    
                     ///lấy thống kê theo tuần
                     res = Jsoup.connect(link2)
                             .ignoreContentType(true)
@@ -277,7 +280,7 @@ public class LapTrinhMang_DoAn_Server {
                     int TongSoCaNhiem = Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Confirmed").toString()) - Integer.parseInt(((JSONObject) arr.get(1)).get("Confirmed").toString());
                     int TongSoCaKhoiBenh = Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Recovered").toString())-Integer.parseInt(((JSONObject) arr.get(1)).get("Recovered").toString());
                     int TongSoCaTuVong = Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Deaths").toString())-Integer.parseInt(((JSONObject) arr.get(1)).get("Deaths").toString());
-
+                    
                     jsonXuat.put("TongSoCaNhiem", TongSoCaNhiem);
                     jsonXuat.put("TongSoCaKhoiBenh", TongSoCaKhoiBenh);
                     jsonXuat.put("TongSoCaTuVong", TongSoCaTuVong);
@@ -316,7 +319,7 @@ public class LapTrinhMang_DoAn_Server {
             
             return jsonXuat.toString();
         }
-        ///
+        ///ko sử dụng
         private String danhSachThanhPho(){
             String linkJson = "https://countriesnow.space/api/v0.1/countries/population/cities?fbclid=IwAR0cR4DLQN_MYC_rY3HcwbJBEWFvjD1ZxLaW5w_qlBweWiCq6XeKEeoM5Uo";
             try{
@@ -360,6 +363,7 @@ public class LapTrinhMang_DoAn_Server {
                 String Longitude = object.get("longitude").toString();
                 jsonXuat.put("Latitude", Latitude);//lat
                 jsonXuat.put("Longitude", Longitude);//long
+                
                 //lấy thời tiết
                 res = Jsoup.connect(linkJsoup + Latitude + "," + Longitude)
                         .ignoreContentType(true)
@@ -526,7 +530,7 @@ public class LapTrinhMang_DoAn_Server {
                 parse = new JSONParser();
                 JSONObject code = (JSONObject) parse.parse(getCountryCode.body());
                 String maQuocGia = code.get("countryCode").toString();
-                
+                // lấy thông tin của quốc gia
                 Connection.Response res = Jsoup.connect(link)
                         .ignoreContentType(true)
                         .method(Connection.Method.GET)
@@ -540,7 +544,7 @@ public class LapTrinhMang_DoAn_Server {
                     newObject.put("countryCode", getObjectArray.get("countryCode"));
                     newObject.put("countryName", getObjectArray.get("countryName"));
                     if(getObjectArray.get("countryCode").equals(maQuocGia)){
-                        jsonXuat.put("QuocGiaHienTai", traCuuQuocGia(getObjectArray.get("countryName").toString()));
+                        jsonXuat.put("QuocGiaHienTai", traCuuQuocGia(getObjectArray.get("countryName").toString()));//sài lại hàm
                     }
                     mangXuat.add(newObject);
                 }
@@ -601,10 +605,6 @@ public class LapTrinhMang_DoAn_Server {
                     jsonXuat.put("currency", e.get(6).text());
                     jsonXuat.put("languages", e.get(7).text());
                     jsonXuat.put("neighbours", e.get(8).text());
-//                    res = Jsoup.connect("https://www.geonames.org/"+countryID)
-//                        .ignoreContentType(true)
-//                        .method(Connection.Method.GET)
-//                        .execute();
                     
                 }else{
                     jsonXuat.put("status", "fail");
