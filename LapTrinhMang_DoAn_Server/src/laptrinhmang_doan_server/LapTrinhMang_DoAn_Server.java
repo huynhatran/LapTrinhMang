@@ -82,8 +82,8 @@ public class LapTrinhMang_DoAn_Server {
                 while(true){
                     try {
                         line = in.readLine();
-                         
-                        out.write(sercurityData.maHoaAES(Menu(line),SESSION_KEY));
+                        String kq = Menu(line);
+                        out.write(sercurityData.maHoaAES(kq,SESSION_KEY));
                         out.newLine();
                         out.flush();
                     } catch (IOException e) {
@@ -276,7 +276,8 @@ public class LapTrinhMang_DoAn_Server {
                         .execute();
                 parse = new JSONParser();
                 JSONArray arr = (JSONArray) parse.parse(res.body());
-                    if(arr.size()!=0){
+                if(arr.size()!=0){
+                    
                     int TongSoCaNhiem = Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Confirmed").toString()) - Integer.parseInt(((JSONObject) arr.get(1)).get("Confirmed").toString());
                     int TongSoCaKhoiBenh = Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Recovered").toString())-Integer.parseInt(((JSONObject) arr.get(1)).get("Recovered").toString());
                     int TongSoCaTuVong = Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Deaths").toString())-Integer.parseInt(((JSONObject) arr.get(1)).get("Deaths").toString());
@@ -284,17 +285,28 @@ public class LapTrinhMang_DoAn_Server {
                     jsonXuat.put("TongSoCaNhiem", TongSoCaNhiem);
                     jsonXuat.put("TongSoCaKhoiBenh", TongSoCaKhoiBenh);
                     jsonXuat.put("TongSoCaTuVong", TongSoCaTuVong);
-                    //jsonXuat.put("TongSoCaDangDieuTri", Integer.parseInt(((JSONObject) arr.get(arr.size()-1)).get("Active").toString()));
 
                     for(int i = 0; i<arr.size()-1;i++)
                     {
                         JSONObject ob1 = (JSONObject) arr.get(i);
                         JSONObject ob2 = (JSONObject) arr.get(i+1);
                         JSONObject newObject = new JSONObject();
-                        int Confirmed = Integer.parseInt(ob2.get("Confirmed").toString()) - Integer.parseInt(ob1.get("Confirmed").toString());
-                        int Recovered = Integer.parseInt(ob2.get("Recovered").toString()) - Integer.parseInt(ob1.get("Recovered").toString());
-                        //int Active = Integer.parseInt(ob2.get("Confirmed").toString()) - Integer.parseInt(ob1.get("Confirmed").toString());
-                        int Deaths = Integer.parseInt(ob2.get("Deaths").toString()) - Integer.parseInt(ob1.get("Deaths").toString());
+                        int Confirmed, Recovered, Deaths;
+                        if(Integer.parseInt(ob2.get("Confirmed").toString())==0){
+                            Confirmed = 0;
+                        }else{
+                            Confirmed = Integer.parseInt(ob2.get("Confirmed").toString()) - Integer.parseInt(ob1.get("Confirmed").toString());
+                        }
+                        if(Integer.parseInt(ob2.get("Recovered").toString())==0){
+                            Recovered = 0;
+                        }else{
+                            Recovered = Integer.parseInt(ob2.get("Recovered").toString()) - Integer.parseInt(ob1.get("Recovered").toString());
+                        }
+                        if(Integer.parseInt(ob2.get("Deaths").toString())==0){
+                            Deaths = 0;
+                        }else{
+                            Deaths = Integer.parseInt(ob2.get("Deaths").toString()) - Integer.parseInt(ob1.get("Deaths").toString());
+                        }
                         newObject.put("Confirmed", Confirmed);
                         newObject.put("Deaths", Deaths);
                         newObject.put("Recovered", Recovered);
@@ -492,7 +504,7 @@ public class LapTrinhMang_DoAn_Server {
                     dem++;
                 }
             }catch(IOException | ParseException | IndexOutOfBoundsException e){
-                System.err.println("lỗi server "+e.getMessage());
+                System.err.println("Lỗi server tra cứu thành phố "+e.getMessage());
                 jsonXuat.put("status", "fail");
                 return jsonXuat.toString();
             }
@@ -526,7 +538,7 @@ public class LapTrinhMang_DoAn_Server {
                 for(int i=0;i<arr.size();i++){
                     JSONObject getObjectArray = (JSONObject) arr.get(i);
                     JSONObject newObject = new JSONObject();
-                    newObject.put("countryCode", getObjectArray.get("countryCode"));
+                    //newObject.put("countryCode", getObjectArray.get("countryCode"));
                     newObject.put("countryName", getObjectArray.get("countryName"));
                     if(getObjectArray.get("countryCode").equals(maQuocGia)){
                         jsonXuat.put("QuocGiaHienTai", traCuuQuocGia(getObjectArray.get("countryName").toString()));//sài lại hàm

@@ -18,13 +18,15 @@ public class ConnectServer {
     public ConnectServer(){
         try {
             socket = new Socket("127.0.0.1",3456);
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException ex) {
             Logger.getLogger(ConnectServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public boolean senData(String data){
         try {
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            
             
             out.write(data);
             out.newLine();
@@ -38,7 +40,7 @@ public class ConnectServer {
     }
     public String receiveData(){
         try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            
             String nhan = in.readLine();
             //in.close();
             return nhan;

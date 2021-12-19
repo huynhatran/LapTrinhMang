@@ -53,10 +53,8 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
         LocalDateTime now = LocalDateTime.now();  
         LocalDate date = LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth());
         //trừ đi 6 ngày
-        LocalDate ngayBatDau = date.minusYears(0).minusMonths(0).minusWeeks(0).minusDays(6);
-        Date today = new Date(); 
-        long d1 = today.getTime();
-        java.sql.Date denNgay = new java.sql.Date(d1);// trả về định dạng 2005-02-02
+        LocalDate ngayBatDau = date.minusYears(0).minusMonths(0).minusWeeks(0).minusDays(7);
+        LocalDate denNgay = date.minusYears(0).minusMonths(0).minusWeeks(0).minusDays(1);
         String tenChucNang = "tracuucovid#Vietnam#"+ngayBatDau.toString()+"#"+denNgay;
         
         MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES(tenChucNang, MainFrame._SESSION_KEY));
