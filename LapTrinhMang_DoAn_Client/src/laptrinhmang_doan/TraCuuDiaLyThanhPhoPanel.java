@@ -49,7 +49,7 @@ public class TraCuuDiaLyThanhPhoPanel extends JPanel {
         searchComponent1.addEvent(new SearchEvent() {
             @Override
             public void onPressed(SearchCallBack call) {
-                if(!searchComponent1.getText().isEmpty() && !Pattern.matches(".*[(#\"*=<>$%@()+/)].*", searchComponent1.getText())){
+                if(!searchComponent1.getText().isEmpty() && !Pattern.matches(".*[(#\"*=<>$%@()'+/)].*", searchComponent1.getText())){
                     ///gửi chuỗi dữ liệu đã được mã hóa AES tới server
                     MainFrame._CONNECT_SERVER.senData(MainFrame._SERCURITY_CLIENT.maHoaAES("tracuudialythanhpho#"+searchComponent1.getText(), MainFrame._SESSION_KEY));
                     
@@ -67,7 +67,7 @@ public class TraCuuDiaLyThanhPhoPanel extends JPanel {
                     if(searchComponent1.getText().isEmpty())
                         JOptionPane.showMessageDialog(null, "Vui lòng nhập thành phố cần tìm.");
                     else
-                        JOptionPane.showMessageDialog(null, "Vui lòng nhập thành phố cần tìm không chứa các ký tự đặt biệt. (#\"*=<>$%@()+/)");
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập thành phố cần tìm không chứa các ký tự đặt biệt. (#\"*=<>$%@()'+/)");
                 }
             }
 

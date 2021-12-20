@@ -143,6 +143,8 @@ public class LapTrinhMang_DoAn_Server {
             return xuatKetQua;
         }
         //kết quả trả về của các hàm là 1 chuỗi Json
+        //link covid của các nước trên thế giới: https://ncovi.vnpt.vn/thongtindichbenh_v2
+        //link thống kê từ ngày tới ngày thế giới: https://api.covid19api.com/world?from=2021-12-12&to=2021-12-18
         private String thongKeCovidTheGioi(){
             //lấy ngày tháng năm hiện tại
             LocalDateTime now = LocalDateTime.now();  
@@ -208,6 +210,9 @@ public class LapTrinhMang_DoAn_Server {
             
             return jsonXuat.toString();
         }
+        
+        //link covid của các tỉnh VN: https://ncovi.vnpt.vn/thongtindichbenh_v2
+        //link thống kê từ ngày tới ngày VN: https://api.covid19api.com/country/vietnam?from=2021-12-12&to=2021-12-18
         private String thongKeCovidVietNam(){
             String link = "https://ncovi.vnpt.vn/thongtindichbenh_v2";
             jsonXuat = new  JSONObject();
@@ -258,6 +263,7 @@ public class LapTrinhMang_DoAn_Server {
             return jsonXuat.toString();
         }
 
+        //link tra cứu theo quốc gia từ ngày tới ngày: https://api.covid19api.com/country/vietnam?from=2021-12-12&to=2021-12-18
         private String traCuuCovid(String tenQuocGia, String ngayBatDau, String ngayKetThuc){
             //vì cấu trúc api nên phải trừ đi 1 ngày để tính toán(Lấy ngày sau trừ ngày trước)
             //ngayBatDau có định dạng "2015-08-04";
@@ -331,7 +337,8 @@ public class LapTrinhMang_DoAn_Server {
             
             return jsonXuat.toString();
         }
-        
+        //link lấy vị trí theo IP wifi hiện tại (trong hàm có chạy với header, để test trên web thì cần email): https://spott.p.rapidapi.com/places/ip/me
+        //link lấy thời tiết tiết(truyền vào lat,long): https://weather.com/vi-VN/weather/today/l/12.213,109.194
         private String thanhPhoHienTai(){
             String linkJson = "https://spott.p.rapidapi.com/places/ip/me";
             String linkJsoup = "https://weather.com/vi-VN/weather/today/l/";
@@ -421,6 +428,8 @@ public class LapTrinhMang_DoAn_Server {
             jsonXuat.put("status", "success");
             return jsonXuat.toString();
         }
+        //link tra cứu thành phố (trong hàm có chạy với header, để test trên web thì cần email): https://spott.p.rapidapi.com/places?type=CITY&skip=0&limit=1&q=phan thiết
+        //link lấy thời tiết tiết(truyền vào lat,long): https://weather.com/vi-VN/weather/today/l/12.213,109.194
         private String traCuuThanhPho(String tenThanhPho){
             jsonXuat = new  JSONObject();
             JSONObject object;
@@ -511,7 +520,8 @@ public class LapTrinhMang_DoAn_Server {
             jsonXuat.put("status", "success");
             return jsonXuat.toString();
         }
-        
+        //link lấy danh sách quốc gia: http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&countarrayListNationry=&username=leminhcuong2988&style=full
+        //link lấy vị trí quốc gia hiện tại (Lấy dữa vào countryCode): http://ip-api.com/json/
         private String danhSachQuocGia(){
             JSONArray mangXuat = new JSONArray();
             String link = "http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&countarrayListNationry=&username=leminhcuong2988&style=full";
@@ -556,6 +566,8 @@ public class LapTrinhMang_DoAn_Server {
             jsonXuat.put("function", "danhsachquocgia");//để dưới đây để khỏi trùng lập  việc gọi hàm tra cứu
             return jsonXuat.toString();
         }
+        //link tra cứu quốc gia sửa dụng Json: http://api.geonames.org/countryInfoJSON?formatted=true&lang=en&countarrayListNationry=&username=leminhcuong2988&style=full
+        //link tra cứu quốc gia sửa dụng Jsoup: https://www.geonames.org/countries/VN/
         private String traCuuQuocGia(String countryName){
             jsonXuat = new JSONObject();
             jsonXuat.put("function", "tracuudialyquocgia");

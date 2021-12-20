@@ -348,20 +348,19 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
             try{
                 Date getdate1 = Date_TuNgay.getDate();
                 Date getdate2 = Date_DenNgay.getDate();
-                
+                long d1 = getdate1.getTime();
+                long d2 = getdate2.getTime();
+                java.sql.Date tuNgay = new java.sql.Date(d1);
+                java.sql.Date denNgay = new java.sql.Date(d2);
                 Date today = new Date();
+                //System.err.println(tuNgay.toString()+", "+denNgay.toString());
                 if(getdate2.after(today)){
                     JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày kết thúc nhỏ hơn hoặc bằng hôm nay!");
                 }else{
-                    if(getdate1.after(getdate2) || getdate1.toString().equals(getdate2.toString())){
+                    if(getdate1.after(getdate2) || tuNgay.toString().equals(denNgay.toString())){
                         JOptionPane.showMessageDialog(null, "Vui lòng nhập ngày sau lớn hơn ngày trước!");
                     }else{
-                        long d1 = getdate1.getTime();
-                        long d2 = getdate2.getTime();
-                        java.sql.Date tuNgay = new java.sql.Date(d1);
-                        java.sql.Date denNgay = new java.sql.Date(d2);
-
-                        //System.out.println(Combobox_QuocGia.getSelectedItem());
+                        
                         //gửi yêu cầu tới server lấy kết quả tìm kiếm theo ngày
                         String tenChucNang = "tracuucovid#"+Combobox_QuocGia.getItemAt(Combobox_QuocGia.getSelectedIndex())+"#"+tuNgay.toString()+"#"+denNgay.toString();
 
@@ -382,9 +381,6 @@ public class TraCuuCovidPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void Combobox_QuocGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Combobox_QuocGiaActionPerformed
-//        if(Combobox_QuocGia.getSelectedItem() != null){
-//            System.out.println("chọn: "+Combobox_QuocGia.getSelectedItem());
-//        }
         
     }//GEN-LAST:event_Combobox_QuocGiaActionPerformed
 

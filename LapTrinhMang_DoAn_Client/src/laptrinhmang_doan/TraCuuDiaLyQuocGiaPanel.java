@@ -95,8 +95,11 @@ public class TraCuuDiaLyQuocGiaPanel extends javax.swing.JPanel {
             label_ToaDo.setText(json.get("countryName").toString());
             label_MaQuocGia.setText(json.get("countryCode").toString());
             Label_ChauLuc.setText(json.get("continentName").toString());
-            txt_QuocGiaLienKe.setText(json.get("neighbours").toString());
-            
+            if(json.get("neighbours").toString().isEmpty()){
+                txt_QuocGiaLienKe.setText("Không có quốc gia liền kề");
+            }else{
+                txt_QuocGiaLienKe.setText(json.get("neighbours").toString());
+            }
         }else{
             JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả!");
         }
